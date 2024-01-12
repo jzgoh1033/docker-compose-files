@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose -f docker-compose-normal-load.yml convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: nodejs-app2
+  name: nodejs_app2
+spec:
+  ports:
+    - name: "9888"
+      port: 9888
+      targetPort: 9888
+    - name: 9888-tcp
+      port: 9888
+      targetPort: 9888
+  selector:
+    io.kompose.service: nodejs-app2
+status:
+  loadBalancer: {}

@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  creationTimestamp: null
+  name: mysql_db_nodejs_network
+spec:
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              io.kompose.network/mysql_db_nodejs_network: "true"
+  podSelector:
+    matchLabels:
+      io.kompose.network/mysql_db_nodejs_network: "true"

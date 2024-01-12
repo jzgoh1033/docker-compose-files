@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose -f docker-compose-normal-load.yml convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: nginx-exporter3
+  name: nginx-exporter3
+spec:
+  ports:
+    - name: "9116"
+      port: 9116
+      targetPort: 9113
+    - name: 9116-tcp
+      port: 9116
+      targetPort: 9116
+  selector:
+    io.kompose.service: nginx-exporter3
+status:
+  loadBalancer: {}

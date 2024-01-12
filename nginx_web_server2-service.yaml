@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose -f docker-compose-normal-load.yml convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: nginx-web-server2
+  name: nginx_web_server2
+spec:
+  ports:
+    - name: "8080"
+      port: 8080
+      targetPort: 8080
+    - name: "7072"
+      port: 7072
+      targetPort: 7072
+    - name: 7072-tcp
+      port: 7072
+      targetPort: 7072
+    - name: 8080-tcp
+      port: 8080
+      targetPort: 8080
+  selector:
+    io.kompose.service: nginx-web-server2
+status:
+  loadBalancer: {}

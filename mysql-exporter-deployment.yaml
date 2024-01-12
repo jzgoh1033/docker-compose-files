@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose -f docker-compose-normal-load.yml convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: mysql-exporter
+  name: mysql-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: mysql-exporter
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose -f docker-compose-normal-load.yml convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/mysqlexporter_net: "true"
+        io.kompose.network/prometheus_collection_network: "true"
+        io.kompose.service: mysql-exporter
+    spec:
+      containers:
+        - args:
+            - --collect.global_status
+            - --collect.global_variables
+            - --collect.engine_innodb_status
+            - --collect.info_schema.processlist
+            - --collect.info_schema.tables
+            - --collect.info_schema.innodb_metrics
+            - --collect.binlog_size
+            - --collect.auto_increment.columns
+            - --log.level=debug
+          env:
+            - name: DATA_SOURCE_NAME
+              value: mysqld_exporter:mysqldexporterPass@(mysql-server:3306)/performance_schema?allowCleartextPasswords=true
+          image: prom/mysqld-exporter:v0.13.0
+          name: mysql-exporter
+          ports:
+            - containerPort: 9104
+          resources: {}
+          volumeMounts:
+            - mountPath: /etc
+              name: mysql-exporter-claim0
+      restartPolicy: Always
+      volumes:
+        - name: mysql-exporter-claim0
+          persistentVolumeClaim:
+            claimName: mysql-exporter-claim0
+status: {}

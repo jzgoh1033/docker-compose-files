@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose -f docker-compose-normal-load.yml convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: telegraf
+  name: telegraf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: telegraf
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose -f docker-compose-normal-load.yml convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/telegraf_influx_network: "true"
+        io.kompose.service: telegraf
+    spec:
+      containers:
+        - image: telegraf:alpine
+          name: telegraf
+          ports:
+            - containerPort: 8125
+          resources:
+            limits:
+              cpu: 500m
+              memory: "209715200"
+          volumeMounts:
+            - mountPath: /etc/telegraf/telegraf.conf
+              name: telegraf-claim0
+              readOnly: true
+            - mountPath: /var/log/nginx/nginx_loadbalancer_access.log
+              name: telegraf-claim1
+            - mountPath: /var/log/nginx/nginx_webserver1_access.log
+              name: telegraf-claim2
+            - mountPath: /var/log/nginx/nginx_webserver2_access.log
+              name: telegraf-claim3
+      restartPolicy: Always
+      volumes:
+        - name: telegraf-claim0
+          persistentVolumeClaim:
+            claimName: telegraf-claim0
+            readOnly: true
+        - name: telegraf-claim1
+          persistentVolumeClaim:
+            claimName: telegraf-claim1
+        - name: telegraf-claim2
+          persistentVolumeClaim:
+            claimName: telegraf-claim2
+        - name: telegraf-claim3
+          persistentVolumeClaim:
+            claimName: telegraf-claim3
+status: {}

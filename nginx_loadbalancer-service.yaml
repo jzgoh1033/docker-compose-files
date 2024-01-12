@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose -f docker-compose-normal-load.yml convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: nginx-loadbalancer
+  name: nginx_loadbalancer
+spec:
+  ports:
+    - name: "443"
+      port: 443
+      targetPort: 443
+    - name: "7073"
+      port: 7073
+      targetPort: 7073
+    - name: 443-tcp
+      port: 443
+      targetPort: 443
+  selector:
+    io.kompose.service: nginx-loadbalancer
+status:
+  loadBalancer: {}

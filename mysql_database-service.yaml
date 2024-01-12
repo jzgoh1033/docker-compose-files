@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose -f docker-compose-normal-load.yml convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: mysql-database
+  name: mysql_database
+spec:
+  ports:
+    - name: "3306"
+      port: 3306
+      targetPort: 3306
+    - name: 3306-tcp
+      port: 3306
+      targetPort: 3306
+  selector:
+    io.kompose.service: mysql-database
+status:
+  loadBalancer: {}
